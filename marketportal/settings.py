@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-dpgi*9e7v!ezg*7s2t*w9wun^&jmt=p3a#ijx74(b5(mj^6$)v
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['markeportal.onrender.com','http://127.0.0.1']
+ALLOWED_HOSTS = ['marketportalke.onrender.com']
 
 
 # Application definition
