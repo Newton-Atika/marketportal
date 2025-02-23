@@ -1,0 +1,32 @@
+{% extends "home/base.html" %} 
+
+{% block title %}{{item.name}}{% endblock %}
+
+{% block content %}
+    <div class='bg-gray-100 flex flex-wrap'>
+        <div class=''>
+            <img src='{{ item.image.url }}' class=''>
+        </div>
+        <div class='bg-white'>
+            <h1 class='text-gray-900 p-1 bg-white'>{{ item.description }}</h1>
+            <h1 class='p-1 text-gray-900 '><strong>Name: {{ item.name }}</strong></h1>
+            <h1 class='p-1 text-gray-900 '><strong>Price: {{ item.Price }}</strong></h1>
+            <form method="POST" action="{% url 'home:add_to_shopping_list' item.id %}">
+                {% csrf_token %}
+                <div class="flex items-center p-1 space-x-2">
+                    <label for="quantity" class="text-sm"><strong>Quantity:</strong></label>
+                    <input
+                        type="number"
+                        name="quantity"
+                        min="1"
+                        value="1"
+                        class="w-16 text-center border rounded-md bg-white text-black"
+                >
+                </div>
+                <div class='bg-white p-1'>
+                    <button type="submit" class="p-1 mb-1 justify-between bg-gray-900 hover:bg-gray-700 text-white rounded-md">Add to List</button><a class='text-gray-900 p-1 m-2'><strong>-{{ item.sav }}</strong></a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'home/base.html' %}
+
+{% block title %}Help{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6 mt-8">
+    <h1 class="text-2xl font-bold text-gray-800 border-b pb-2 mb-4">How to Buy</h1>
+    <p class="text-gray-700 leading-relaxed">
+        Buyers can purchase our goods online via 
+        <a href="/" class="text-blue-600 hover:underline">Products</a> 
+        and pick them up at our shop location below.
+    </p>
+    <p class="text-gray-700 mt-2">
+        Payments are accepted only via M-Pesa at our till number <strong>3217782</strong>. 
+        <span class="text-red-600 font-semibold">Cash payments are not allowed.</span>
+    </p>
+    <p class="text-gray-700 mt-2">
+        The shop is open from <strong>8 AM to 9 PM</strong>.
+    </p>
+    <p class="text-gray-700 mt-2">
+        All items listed on our site are available in our stores. Once purchased, 
+        you can pick them up immediately.
+    </p>
+
+    <h1 class="text-2xl font-bold text-gray-800 border-b pb-2 mt-6 mb-4">Where to Pick</h1>
+    <p class="text-gray-700">
+        Pick up from <strong>Kangaru Market</strong>. Find the location 
+        <a href="{% url 'map:maps' %}" class="text-blue-600 hover:underline">here</a>.
+    </p>
+</div>
+{% endblock %}

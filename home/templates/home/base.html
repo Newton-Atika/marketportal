@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name='viewportt' content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <title>{% block title %}{% endblock %}-UniMarket</title>
+    </head>
+    <body class='m-1/2'>
+        <nav class='nav flex items-center justify-between p-1 bg-white border-b border-gray-900 shadow-md'>
+            <div class='title'>
+                <a href="/" class='text-white bg-gray-900 p-1 m-1 rounded-md hover:bg-gray-700'>
+                    Products
+                </a>
+            </div>
+            <div class='left-nav flex items-center space-x-4'>
+                <div class='search'>
+                    <form class='searchForm flex items-center' method="GET" action="{% url 'home:search' %}">
+                        <input 
+                            type="text" 
+                            name="query" 
+                            value="{{ query }}" 
+                            class='searchInput p-1 m-1 border border-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500' 
+                            placeholder="Search product...">
+                        <button 
+                            type="submit" 
+                            class='m-1 bg-blue-600 p-1 rounded-md hover:bg-blue-700'>
+                            Search
+                        </button>
+                    </form>
+                </div>
+                <div>
+                    <a href="{% url 'home:shopping_list' %}" class='flex text-white items-center justify-center bg-gray-900 p-1 rounded-md hover:bg-gray-700'>
+                        CART  <i class="fa fa-shopping-cart" style="font-size:24py"></i>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        
+        {% block content %}
+        {% endblock %}
+    </body>
+    <footer class='bg-gray-900 flex justify-between'>
+        <div class='w-1/2 pr-5'>
+            <h1 class='px-3 mb-2 text-white font-semibold'>About</h1>
+            <p class='px-3 mb-2 text-white'>This platform provides online shopping experience to people around the university. For more information visit the help page</p>
+        </div>
+        <div class='w-1/2'>
+            <ul>
+                <li><a class='mb-2 text-white font-semibold'>Contact</a></li>
+                <li><a class='text-white '>email: <strong>newtonatika@gmail.com</strong></a></li>
+                <li><a class='text-white'>phone number: <strong>0745770557 / 0741532802</strong></a></li>
+                <li><a class='text-white'>whatsapp number: <strong>0745770557</strong></a></li>
+                <li><a href='{% url "home:help" %}' class='text-blue-500 hover:text-blue-700'>help</strong></a></li>
+            </ul>
+        </div>
+    </footer>
+</html>
+</html>

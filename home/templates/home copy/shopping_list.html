@@ -1,0 +1,77 @@
+{% extends 'home/base.html' %}
+
+{% block title %}ShoppingList{% endblock %}
+
+{% block content %}
+<div class="bg-gray-100 p-6">
+    <h1 class="text-2xl font-bold mb-4">Shopping List</h1>
+    <table class="table-auto border-collapse border border-gray-400 w-full">
+        <thead class="bg-gray-200">
+            <tr>
+                <th class="border border-gray-400 px-4 py-2">Product</th>
+                <th class="border border-gray-400 px-4 py-2">Quantity</th>
+                <th class="border border-gray-400 px-4 py-2">Price (KSH)</th>
+                <th class="border border-gray-400 px-4 py-2">Total Price (KSH)</th>
+                <th class="border border-gray-400 px-4 py-2">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in shopping_items %}
+            <tr>
+                <td class="border border-gray-400 px-4 py-2">{{ item.product.name }}</td>
+                <td class="border border-gray-400 px-4 py-2">
+                    <form method="POST" action="{% url 'home:update_shopping_list' item.id %}">
+                        {% csrf_token %}
+                        <input
+                            type="number"
+                            name="quantity"
+                            value="{{ item.quantity }}"
+                            min="1"
+                            class="w-16 m-1 text-center border rounded-md bg-white text-black"
+                        >
+                        <button type="submit" class="ml-2 p-1 bg-blue-600 hover:bg-blue-700 text-white rounded-md">
+                            Update
+                        </button>
+                    </form>
+                </td>
+                <td class="border border-gray-400 px-4 py-2">{{ item.product.Price }}</td>
+                <td class="border border-gray-400 px-4 py-2">{{ item.quantity|floatformat:2 }} * {{ item.product.Price|floatformat:2  }}</td>
+                <td class="border border-gray-400 px-4 py-2">
+                    <form method="POST" action="{% url 'home:delete_from_shopping_list' item.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="p-1 bg-red-600 hover:bg-red-700 text-white rounded-md">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot class="bg-gray-200">
+            <tr>
+                <td colspan="3" class="text-right border border-gray-400 px-4 py-2 font-bold">Overall Total (KSH):</td>
+                <td class="border border-gray-400 px-4 py-2 font-bold">{{ total_price }}</td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+    <div class="m-1 p-1 bg-gradient-to-r from-blue-600 to-purple-700 rounded-lg shadow-lg text-center text-white">
+        <h>TILL NUMBER:<strong>3217782</strong><h><br>
+        <h>NAME: <strong>Newton Shivachi</strong><h>
+    </div>
+
+    <div class="mt-6">
+        <a href="{% url 'home:download_shopping_list_after_payment' %}" 
+        class="mt-4 inline-block bg-blue-500 text-white py-2 px-4 rounded">
+         Download Shopping List
+         <script>
+            document.getElementById("download-link").addEventListener("click", function(event) {
+                event.preventDefault();
+                window.location.href = this.href;
+            });
+         </script>
+     </a>
+
+    </div>
+</div>
+{% endblock %}

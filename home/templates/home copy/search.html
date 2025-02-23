@@ -1,0 +1,36 @@
+{% extends 'home/base.html' %}
+
+{% block title %}Search{% endblock %}
+
+{%block content%}
+<div class='p-1 bg-gray-200 flex justify-between items-center'>
+    <h2 class='text-xl text-gray-900 font-bold'>Search Results for {{ query }}</h2>
+</div>
+<div class='flex flex-wrap bg-gray-100'>
+    {% for item in items %}
+        <div class='m-1 bg-gray-100'>
+            <a href='{% url "home:detail" item.id %}'>   
+                <img src="{{ item.image.url }}" class='rounded-t-md' alt="{{ item.name }}">
+                <h3 class='bg-white text-gray-900'><strong> Name: {{ item.name }}</strong> </h3>
+                <p class='bg-white text-gray-900'><strong> Price:KSH {{ item.Price }}</strong></p>
+                <form method="POST" action="{% url 'home:add_to_shopping_list' item.id %}">
+                    {% csrf_token %}
+                    <div class="bg-white text-gray-900 bg-white flex flex-wrap items-center space-x-2">
+                        <label for="quantity" class="text-sm"><strong>Quantity:</strong></label>
+                        <input
+                            type="number"
+                            name="quantity"
+                            min="1"
+                            value="1"
+                            class="w-16 text-center border rounded-md bg-white text-black"
+                        >
+                    </div>
+                    <div class='bg-white'>
+                        <button type="submit" class="p-1 mt-2 bg-gray-900 hover:bg-gray-700 text-white rounded-md">Add to List</button><a class='text-gray-900 p-1 m-2'><strong>-{{ item.sav }}</strong></a>
+                    </div>
+                </form>
+            </a>
+        </div>
+    {% endfor %}
+</div>  
+{%endblock%}
