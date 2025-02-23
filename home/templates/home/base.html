@@ -8,7 +8,7 @@
         <title>{% block title %}{% endblock %} - UniMarket</title>
     </head>
     <body class="bg-gray-100">
-        <!-- Navigation Bar -->
+        <!-- Main Navigation Bar -->
         <nav class="flex items-center justify-between px-4 py-3 bg-white shadow-md border-b border-gray-300">
             <!-- Left Section (Products & Cart) -->
             <div class="flex items-center space-x-4">
@@ -19,24 +19,26 @@
                     CART <i class="fa fa-shopping-cart ml-2" style="font-size:18px"></i>
                 </a>
             </div>
+        </nav>
 
-            <!-- Search Form -->
-            <form class="flex items-center w-full sm:w-auto" method="GET" action="{% url 'home:search' %}">
+        <!-- Search Navigation Bar -->
+        <nav class="flex items-center justify-center px-4 py-3 bg-white shadow-md border-b border-gray-300">
+            <form class="flex items-center w-full sm:w-2/3 md:w-1/2" method="GET" action="{% url 'home:search' %}">
                 <input 
                     type="text" 
                     name="query" 
                     value="{{ query }}" 
-                    class="p-2 border border-gray-400 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto" 
+                    class="p-2 border border-gray-400 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" 
                     placeholder="Search product..."
                 >
                 <button 
                     type="submit" 
-                    class="bg-blue-600 text-white px-3 py-2 rounded-r-md hover:bg-blue-700">
+                    class="bg-blue-600 text-white px-4 py-2 rounded-r-md hover:bg-blue-700">
                     Search
                 </button>
             </form>
         </nav>
-        
+
         <!-- Main Content -->
         <div class="container mx-auto px-4 py-6">
             {% block content %}
