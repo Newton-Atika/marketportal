@@ -9,33 +9,32 @@
     </head>
     <body class="bg-gray-100">
         <!-- Navigation Bar -->
-        <nav class="flex flex-wrap items-center justify-between p-3 bg-white shadow-md border-b border-gray-300">
-            <div>
+        <nav class="flex items-center justify-between px-4 py-3 bg-white shadow-md border-b border-gray-300">
+            <!-- Left Section (Products & Cart) -->
+            <div class="flex items-center space-x-4">
                 <a href="/" class="text-white bg-gray-900 px-3 py-2 rounded-md hover:bg-gray-700">
                     Products
                 </a>
-            </div>
-            <div class="flex flex-wrap items-center space-x-4">
-                <!-- Search Bar -->
-                <form class="flex flex-wrap items-center" method="GET" action="{% url 'home:search' %}">
-                    <input 
-                        type="text" 
-                        name="query" 
-                        value="{{ query }}" 
-                        class="p-2 border border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto" 
-                        placeholder="Search product..."
-                    >
-                    <button 
-                        type="submit" 
-                        class="bg-blue-600 text-white px-3 py-2 rounded-md hover:bg-blue-700 ml-2">
-                        Search
-                    </button>
-                </form>
-                <!-- Shopping Cart -->
                 <a href="{% url 'home:shopping_list' %}" class="flex items-center bg-gray-900 text-white px-3 py-2 rounded-md hover:bg-gray-700">
                     CART <i class="fa fa-shopping-cart ml-2" style="font-size:18px"></i>
                 </a>
             </div>
+
+            <!-- Search Form -->
+            <form class="flex items-center w-full sm:w-auto" method="GET" action="{% url 'home:search' %}">
+                <input 
+                    type="text" 
+                    name="query" 
+                    value="{{ query }}" 
+                    class="p-2 border border-gray-400 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto" 
+                    placeholder="Search product..."
+                >
+                <button 
+                    type="submit" 
+                    class="bg-blue-600 text-white px-3 py-2 rounded-r-md hover:bg-blue-700">
+                    Search
+                </button>
+            </form>
         </nav>
         
         <!-- Main Content -->
