@@ -70,18 +70,26 @@ def home(request):
     })
 
 def shopping_list_view(request):
-    shopping_items = ShoppingList.objects.all()
+    # Get or create a session key for each user
+    if not request.session.session_key:
+        request.session.create()  # Generates a unique session key
+    session_key = request.session.session_key
 
+    # Get only the shopping items for this user
+    shopping_items = ShoppingList.objects.filter(session_key=session_key)
+
+    # Assign a unique_id if missing
     for item in shopping_items:
         if not item.unique_id:
             item.unique_id = uuid.uuid4()
             item.save()
 
+    # Calculate total price
     total_price = sum(item.quantity * item.product.Price for item in shopping_items)
 
-    # Add total cost for each item
+    # Add total cost per item
     for item in shopping_items:
-        item.total_cost = item.quantity * item.product.Price  # Compute in view
+        item.total_cost = item.quantity * item.product.Price
 
     context = {
         'shopping_items': shopping_items,
@@ -92,19 +100,22 @@ def shopping_list_view(request):
 
 
 def add_to_shopping_list(request, product_id):
-    if request.method == "POST":
-        product = get_object_or_404(Product, id=product_id)
-        quantity = int(request.POST.get("quantity", 1))  
-        
-        shopping_item, created = ShoppingList.objects.get_or_create(
-            product=product,
-            defaults={'quantity': quantity}
-        )
-        if not created:
-            shopping_item.quantity += quantity  
-            shopping_item.save()
+    if not request.session.session_key:
+        request.session.create()
+    session_key = request.session.session_key
 
-        return redirect('home:shopping_list')
+    product = Product.objects.get(id=product_id)
+    shopping_item, created = ShoppingList.objects.get_or_create(
+        product=product,
+        session_key=session_key,  # Ensure item belongs to current user
+        defaults={'quantity': 1}
+    )
+    
+    if not created:
+        shopping_item.quantity += 1  # Increment quantity if item exists
+        shopping_item.save()
+
+    return redirect('home:shopping_list')
 
 
 
