@@ -2,39 +2,42 @@
 
 {% block title %}Home{% endblock %}
 
-{% block content%}
-    <div class="flex flex-wrap gap-3 bg-gray-100 p-2">
-        {% for product in products %}
-        <form method="POST" action="{% url 'home:add_to_shopping_list' product.id %}">
-            {% csrf_token %}
-            <a href='{% url 'home:detail' product.id %}'>
-                <div>
-                    <img src="{{ product.image.url }}" class="rounded-t-xl border-box border-gray-100">
-                </div>
-                <div class="bg-white text-bold text-gray-900 rounded-b-xl p-1">
-                    <a class='pr-8'><strong>{{ product.name }}</strong></a> <a class='text-gray-900'><strong>KSH: {{ product.Price }}</strong> </a>
+{% block content %}
+    <div class="container mx-auto p-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {% for product in products %}
+            <form method="POST" action="{% url 'home:add_to_shopping_list' product.id %}" class="bg-white shadow-md rounded-lg overflow-hidden p-3">
+                {% csrf_token %}
+                <a href="{% url 'home:detail' product.id %}">
+                    <div class="w-full">
+                        <img src="{{ product.image.url }}" class="w-full h-40 object-cover rounded-t-lg">
+                    </div>
+                </a>
+                <div class="p-3">
+                    <p class="font-semibold text-gray-900">{{ product.name }}</p>
+                    <p class="text-gray-700">KSH: <strong>{{ product.Price }}</strong></p>
                     
-                    <div class="flex items-center space-x-2">
+                    <div class="flex items-center space-x-2 mt-2">
                         <label for="quantity" class="text-sm"><strong>Quantity:</strong></label>
-                        <input
-                            type="number"
-                            name="quantity"
-                            min="1"
-                            value="1"
-                            class="w-16 text-center border rounded-md bg-white text-black"
-                    >
+                        <input 
+                            type="number" 
+                            name="quantity" 
+                            min="1" 
+                            value="1" 
+                            class="w-16 text-center border border-gray-400 rounded-md"
+                        >
                     </div>
                     
-            </a>
-                <button
-                    type="submit"
-                    class="p-1 mt-2 bg-gray-900 hover:bg-gray-700 text-white rounded-md"
-                >
-                Add to <i class="fa fa-shopping-cart" style="font-size:24py"></i>
-                </button><a class='p-1 m-2'><strong>-{{ product.sav }}</strong></a>
-            </div>
-        </form>
-        {% endfor %}
+                    <button
+                        type="submit"
+                        class="w-full mt-3 p-2 bg-gray-900 hover:bg-gray-700 text-white rounded-md flex items-center justify-center"
+                    >
+                        Add to <i class="fa fa-shopping-cart ml-2" style="font-size:16px"></i>
+                    </button>
+                    <p class="text-sm text-gray-600 mt-1"><strong>-{{ product.sav }}</strong></p>
+                </div>
+            </form>
+            {% endfor %}
+        </div>
     </div>
-    
 {% endblock %}
