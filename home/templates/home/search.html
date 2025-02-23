@@ -2,35 +2,48 @@
 
 {% block title %}Search{% endblock %}
 
-{%block content%}
-<div class='p-1 bg-gray-200 flex justify-between items-center'>
-    <h2 class='text-xl text-gray-900 font-bold'>Search Results for {{ query }}</h2>
-</div>
-<div class='flex flex-wrap bg-gray-100'>
-    {% for item in items %}
-        <div class='m-1 bg-gray-100'>
-            <a href='{% url "home:detail" item.id %}'>   
-                <img src="{{ item.image.url }}" class='rounded-t-md' alt="{{ item.name }}">
-                <h3 class='bg-white text-gray-900'><strong> Name: {{ item.name }}</strong> </h3>
-                <p class='bg-white text-gray-900'><strong> Price:KSH {{ item.Price }}</strong></p>
-                <form method="POST" action="{% url 'home:add_to_shopping_list' item.id %}">
-                    {% csrf_token %}
-                    <div class="bg-white text-gray-900 bg-white flex flex-wrap items-center space-x-2">
+{% block content %}
+    <div class="container mx-auto p-4">
+        <div class="p-2 bg-gray-200 rounded-md text-center">
+            <h2 class="text-xl text-gray-900 font-bold">Search Results for "{{ query }}"</h2>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
+            {% for item in items %}
+            <form method="POST" action="{% url 'home:add_to_shopping_list' item.id %}" class="bg-white shadow-md rounded-lg overflow-hidden p-3">
+                {% csrf_token %}
+                <a href="{% url 'home:detail' item.id %}">
+                    <div class="w-full">
+                        <img src="{{ item.image.url }}" class="w-full h-40 object-cover rounded-t-lg">
+                    </div>
+                </a>
+                <div class="p-3">
+                    <p class="font-semibold text-gray-900">{{ item.name }}</p>
+                    <p class="text-gray-700">KSH: <strong>{{ item.Price }}</strong></p>
+                    
+                    <div class="flex items-center space-x-2 mt-2">
                         <label for="quantity" class="text-sm"><strong>Quantity:</strong></label>
-                        <input
-                            type="number"
-                            name="quantity"
-                            min="1"
-                            value="1"
-                            class="w-16 text-center border rounded-md bg-white text-black"
+                        <input 
+                            type="number" 
+                            name="quantity" 
+                            min="1" 
+                            value="1" 
+                            class="w-16 text-center border border-gray-400 rounded-md"
                         >
                     </div>
-                    <div class='bg-white'>
-                        <button type="submit" class="p-1 mt-2 bg-gray-900 hover:bg-gray-700 text-white rounded-md">Add to List</button><a class='text-gray-900 p-1 m-2'><strong>-{{ item.sav }}</strong></a>
-                    </div>
-                </form>
-            </a>
+                    
+                    <button
+                        type="submit"
+                        class="w-full mt-3 p-2 bg-gray-900 hover:bg-gray-700 text-white rounded-md flex items-center justify-center"
+                    >
+                        Add to <i class="fa fa-shopping-cart ml-2" style="font-size:16px"></i>
+                    </button>
+                    <p class="text-sm text-gray-600 mt-1"><strong>-{{ item.sav }}</strong></p>
+                </div>
+            </form>
+            {% empty %}
+                <p class="text-gray-700 col-span-full text-center">No results found for "{{ query }}".</p>
+            {% endfor %}
         </div>
-    {% endfor %}
-</div>  
-{%endblock%}
+    </div>
+{% endblock %}
