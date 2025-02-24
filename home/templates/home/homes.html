@@ -10,7 +10,7 @@
                 {% csrf_token %}
                 <a href="{% url 'home:detail' product.id %}">
                     <div class="w-full">
-                        <img src="{{ product.image.url }}" class="w-full h-40 object-contain rounded-t-lg">
+                        <img src="{{ product.image.url }}" class="w-full h-40 object-cover rounded-t-lg">
                     </div>
                 </a>
                 <div class="p-3">
