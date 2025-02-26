@@ -1,4 +1,4 @@
-from .views import help,search,detail,home,shopping_list_view,add_to_shopping_list,update_shopping_list,delete_from_shopping_list,download_shopping_list_after_payment,shopping_list_detail
+from .views import help,search,detail,home,shopping_list_view,add_to_shopping_list,update_shopping_list,download_shopping_list_as_pdf,delete_from_shopping_list,download_shopping_list_after_payment,shopping_list_detail
 from django.urls import path
 
 app_name='home'
@@ -14,4 +14,5 @@ urlpatterns = [
     path('add-to-shopping-list/<int:product_id>/', add_to_shopping_list, name='add_to_shopping_list'),
     path('shopping-list/', shopping_list_view, name='shopping_list'),
     path('download-shopping-list-after-payment/', download_shopping_list_after_payment, name='download_shopping_list_after_payment'),
+    path('shopping-list/download/pdf/', download_shopping_list_as_pdf, name='download_shopping_list_as_pdf'),
 ]
