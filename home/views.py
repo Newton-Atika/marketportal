@@ -10,6 +10,79 @@ import requests
 import json
 from django.http import JsonResponse
 from openpyxl.utils import get_column_letter
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+from reportlab.lib.utils import simpleSplit
+from django.utils.timezone import now
+
+def generate_shopping_list_pdf(session_key):
+    """Generates a PDF file of the current user's shopping list."""
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename=shopping_list.pdf'
+
+    # Create PDF Canvas
+    pdf = canvas.Canvas(response, pagesize=A4)
+    width, height = A4
+
+    pdf.setTitle("Shopping List")
+    pdf.setFont("Helvetica-Bold", 16)
+    pdf.drawString(200, height - 50, "Shopping List")
+
+    pdf.setFont("Helvetica", 10)
+    pdf.drawString(50, height - 70, f"Generated on: {now().strftime('%Y-%m-%d %H:%M:%S')}")
+
+    # Table Headers
+    y_position = height - 100
+    pdf.setFont("Helvetica-Bold", 12)
+    headers = ["Product", "Quantity", "Price (KSH)", "Total Price (KSH)"]
+    x_positions = [50, 200, 300, 400]
+
+    for i, header in enumerate(headers):
+        pdf.drawString(x_positions[i], y_position, header)
+
+    # Fetch shopping items for the specific user
+    shopping_items = ShoppingList.objects.filter(session_key=session_key)
+    total_price = 0
+    y_position -= 20
+    pdf.setFont("Helvetica", 10)
+
+    for item in shopping_items:
+        if y_position < 50:  # Check if page needs a break
+            pdf.showPage()
+            y_position = height - 50
+            pdf.setFont("Helvetica", 10)
+
+        total_item_price = item.quantity * item.product.Price
+        total_price += total_item_price
+
+        # Ensure text doesn't overflow
+        product_name = "\n".join(simpleSplit(item.product.name, "Helvetica", 10, 140))
+        pdf.drawString(x_positions[0], y_position, product_name)
+        pdf.drawString(x_positions[1], y_position, str(item.quantity))
+        pdf.drawString(x_positions[2], y_position, f"{item.product.Price:.2f}")
+        pdf.drawString(x_positions[3], y_position, f"{total_item_price:.2f}")
+
+        y_position -= 20
+
+    # Draw total price
+    pdf.setFont("Helvetica-Bold", 12)
+    pdf.drawString(300, y_position - 10, f"Overall Total (KSH): {total_price:.2f}")
+
+    pdf.save()
+
+    # Clear shopping list after generating the PDF
+    shopping_items.delete()
+
+    return response
+
+
+def download_shopping_list_as_pdf(request):
+    """View to generate and return the shopping list as a PDF file for the current user."""
+    if not request.session.session_key:
+        return HttpResponse("No active shopping session found.", status=400)
+
+    session_key = request.session.session_key
+    return generate_shopping_list_pdf(session_key)
 
 def generate_shopping_list_xlsx(session_key):
     """Generates an XLSX file of the current user's shopping list."""
