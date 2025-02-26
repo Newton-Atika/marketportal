@@ -11,8 +11,8 @@ import json
 from django.http import JsonResponse
 from openpyxl.utils import get_column_letter
 
-def generate_shopping_list_xlsx():
-    """Generates an XLSX file of the shopping list."""
+def generate_shopping_list_xlsx(session_key):
+    """Generates an XLSX file of the current user's shopping list."""
     workbook = openpyxl.Workbook()
     sheet = workbook.active
     sheet.title = "Shopping List"
@@ -21,8 +21,8 @@ def generate_shopping_list_xlsx():
     headers = ["Product", "Quantity", "Price (KSH)", "Total Price (KSH)"]
     sheet.append(headers)
     
-    # Fetch shopping items
-    shopping_items = ShoppingList.objects.all()
+    # Fetch shopping items for the specific user
+    shopping_items = ShoppingList.objects.filter(session_key=session_key)
     total_price = 0
     
     for item in shopping_items:
@@ -53,14 +53,22 @@ def generate_shopping_list_xlsx():
     return workbook
 
 def download_shopping_list_after_payment(request):
-    """View to generate and return the shopping list as an XLSX file."""
-    workbook = generate_shopping_list_xlsx()
-    
+    """View to generate and return the shopping list as an XLSX file for the current user."""
+    if not request.session.session_key:
+        return HttpResponse("No active shopping session found.", status=400)
+
+    session_key = request.session.session_key
+    workbook = generate_shopping_list_xlsx(session_key)
+
     # Prepare response
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = 'attachment; filename=shopping_list.xlsx'
     
     workbook.save(response)
+
+    # Clear shopping list after download
+    ShoppingList.objects.filter(session_key=session_key).delete()
+
     return response
 
 def home(request):
