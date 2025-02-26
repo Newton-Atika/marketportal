@@ -67,15 +67,17 @@
     </div>
 
     <!-- Download Button -->
-    <div class="mt-6 text-center">
+    <div class="mt-6 flex flex-col sm:flex-row justify-center items-center space-y-3 sm:space-y-0 sm:space-x-4 text-center">
         <a href="{% url 'home:download_shopping_list_after_payment' %}" 
-           class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg shadow-md">
-            Download Excel Shopping List
+           class="px-5 py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg shadow-md transition-all duration-300">
+        📊 Download Excel Shopping List
         </a>
-        <a href="{% url 'home:download_shopping_list_as_pdf' %}" class="btn btn-danger">
-            Download as PDF Shopping List
+    
+        <a href="{% url 'home:download_shopping_list_as_pdf' %}" 
+           class="px-5 py-3 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg shadow-md transition-all duration-300">
+        📝 Download PDF Shopping List
         </a>
-
     </div>
+   
 </div>
 {% endblock %}
