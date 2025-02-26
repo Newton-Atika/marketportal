@@ -70,8 +70,12 @@
     <div class="mt-6 text-center">
         <a href="{% url 'home:download_shopping_list_after_payment' %}" 
            class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg shadow-md">
-            Download Shopping List
+            Download Excel Shopping List
         </a>
+        <a href="{% url 'home:download_shopping_list_as_pdf' %}" class="btn btn-danger">
+            Download as PDF Shopping List
+        </a>
+
     </div>
 </div>
 {% endblock %}
