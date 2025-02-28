@@ -48,13 +48,43 @@
         // Add a marker for the shop
         L.marker([shopCoordinates.latitude, shopCoordinates.longitude])
             .addTo(map)
-            .bindPopup(`<b>Shop 1</b><br>Lat: ${shopCoordinates.latitude}, Lon: ${shopCoordinates.longitude}`)
+            .bindPopup(`<b>Market Portal</b><br>Lat: ${shopCoordinates.latitude}, Lon: ${shopCoordinates.longitude}`)
             .openPopup();
 
         // Restrict map view to the circle's bounds
         const bounds = circle.getBounds();
         map.fitBounds(bounds);
         map.setMaxBounds(bounds);
+
+        // Function to get and show user's location
+        function showUserLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const userLat = position.coords.latitude;
+                    const userLon = position.coords.longitude;
+
+                    // Add marker for user's location
+                    L.marker([userLat, userLon], {color: "red"})
+                        .addTo(map)
+                        .bindPopup("<b>Your Location</b>")
+                        .openPopup();
+
+                    // Fit map to include both user and shop
+                    const group = new L.featureGroup([
+                        L.marker([shopCoordinates.latitude, shopCoordinates.longitude]),
+                        L.marker([userLat, userLon])
+                    ]);
+                    map.fitBounds(group.getBounds());
+                }, function(error) {
+                    console.error("Geolocation error:", error.message);
+                });
+            } else {
+                alert("Geolocation is not supported by your browser.");
+            }
+        }
+
+        // Show user location when the page loads
+        showUserLocation();
     </script>
 </body>
 </html>
